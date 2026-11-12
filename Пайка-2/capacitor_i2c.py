@@ -1,5 +1,6 @@
 import time
 import RPi.GPIO as GPIO
+import csv
 
 import mcp3021_driver
 import adc_plot
@@ -35,6 +36,13 @@ try:
         time.sleep(sample_period)
 
     print(f"Измерения закончены, точек: {len(time_values)}")
+    with open("data.csv", w, newline="") as f:
+        writer = csv.writer(f)
+        writer.writerow(["time,s", "voltage, V"])
+        for t,v in zip(time_values, voltage_values):
+            writer.writerow([t,v])
+
+    print("Данные скачались ")
 
     with open("capacitor_data.txt", "w") as f:
         f.write("t, s\tU, V\n")
